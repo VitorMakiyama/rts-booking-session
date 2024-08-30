@@ -1,13 +1,20 @@
 import { createContext, ReactNode, useContext, useReducer } from "react";
 import { SessionItemData } from "../components/Sessions/SessionItem";
 
+// This type allows us to use the user name and email input during the booking of an session
+export type SavedSessionData = SessionItemData & {
+    userName: string;
+    userEmail: string;
+};
+
 type SessionsState = {
-    upcomingSessions: SessionItemData[];
+    upcomingSessions: SavedSessionData[];
 }
 
 type SessionsContextValue = SessionsState & {
-    bookSession: (bookedSession: SessionItemData) => void;
+    bookSession: (bookedSession: SavedSessionData) => void;
     cancelSession: (sessionId: string) => void;
+    isBooked: (sessionId: string) => boolean;
 }
 
 // creates a context that will be delivered by a hook
@@ -30,7 +37,7 @@ type SessionsContextProviderProps = {
 
 type BookSessionAction = {
     type: "BOOK_ACTION";
-    payload: SessionItemData;
+    payload: SavedSessionData;
 };
 type CancelSessionAction = {
     type: "CANCEL_ACTION";
@@ -39,22 +46,21 @@ type CancelSessionAction = {
 type Action = BookSessionAction | CancelSessionAction;
 function sessionsReducer(state: SessionsState, action: Action): SessionsState {
     if (action.type === "BOOK_ACTION") {
+        if (state.upcomingSessions.find((session) => {return session.id === action.payload.id})) {
+            return state
+        }
         return {
+            ...state,
             upcomingSessions: [
                 ...state.upcomingSessions,
                 {
-                    id: action.payload.id,
-                    title: action.payload.title,
-                    summary: action.payload.summary,
-                    description: action.payload.description,
-                    duration: action.payload.duration,
-                    date: action.payload.date,
-                    image: action.payload.image
+                    ...action.payload
                 }
             ]
         };
     } else if (action.type === "CANCEL_ACTION") {
         return {
+            ...state,
             upcomingSessions: [
                 ...state.upcomingSessions.filter((session) => {return session.id != action.sessionId})
             ]
@@ -74,12 +80,16 @@ export default function SessionsContextProvider({ children }: SessionsContextPro
 
     const ctx: SessionsContextValue = {
         upcomingSessions: sessionsState.upcomingSessions,
-        bookSession(bookedSession: SessionItemData) {
+
+        bookSession(bookedSession: SavedSessionData) {
             dispatch({type: "BOOK_ACTION", payload: bookedSession})
         },
         cancelSession(sessionId: string) {
             dispatch({type: "CANCEL_ACTION", sessionId: sessionId})
         },
+        isBooked: (sessionId: string) => {
+            return sessionsState.upcomingSessions.find((session) => {return session.id === sessionId}) != null
+        }
     };
 
     return (

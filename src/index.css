@@ -253,6 +253,12 @@ ul {
   color: #e1d8f0;
 }
 
+#session-page h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  color: #e1d8f0;
+}
+
 #session-page time {
   color: #b6adc5;
   font-size: 1rem;

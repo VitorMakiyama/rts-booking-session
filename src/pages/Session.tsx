@@ -2,6 +2,8 @@ import { useParams } from 'react-router-dom';
 
 import { SESSIONS } from '../dummy-sessions.ts';
 import Button from '../components/UI/Button.tsx';
+import { useState } from 'react';
+import BookSession from '../components/Sessions/BookSession.tsx';
 import { useSessionsContext } from '../store/sessions-context.tsx';
 
 export default function SessionPage() {
@@ -10,7 +12,17 @@ export default function SessionPage() {
   const sessionId = params.id;
   const loadedSession = SESSIONS.find((session) => session.id === sessionId);
 
-  const sessionCtx = useSessionsContext();
+  const [isBookSessionVisible, setBookSessionVisible] = useState(false);
+
+  const { isBooked } = useSessionsContext();
+
+  function onShowBookSessionModal() {
+    setBookSessionVisible(true);
+  }
+
+  function onCloseBookSession() {
+    setBookSessionVisible(false);
+  }
 
   if (!loadedSession) {
     return (
@@ -23,6 +35,7 @@ export default function SessionPage() {
 
   return (
     <main id="session-page">
+      {isBookSessionVisible && <BookSession session={loadedSession} onClose={onCloseBookSession} />}
       <article>
         <header>
           <img
@@ -39,8 +52,7 @@ export default function SessionPage() {
               })}
             </time>
             <p>
-              <Button onClick={() => {sessionCtx.bookSession(loadedSession)}}>Add to upcoming sessions</Button>
-              {/* Todo: Add button that opens "Book Session" dialog / modal */}
+              {isBooked(loadedSession.id) ? <h3>Already booked!</h3> : <Button onClick={onShowBookSessionModal}>Book Session</Button>}
             </p>
           </div>
         </header>

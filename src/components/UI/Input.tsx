@@ -9,7 +9,7 @@ type InputProps = {
 export default function Input(props: InputProps) {
     const { label, id, ...otherProps } = props;
     return <div className="control">
-        <label>{label}</label>
-        <input {...otherProps} />
+        <label htmlFor={id}>{label}</label>
+        <input id={id} {...otherProps} />
     </div>;
 };

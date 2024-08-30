@@ -17,12 +17,17 @@ export default function MainHeader() {
         <header id="main-header">
             <h1>ReactMentoring</h1>
             <nav>
-
-                <p>
-                    <Button to={""} textOnly>Our mission</Button>
-                    <Button to={"sessions"} textOnly>Browse Sessions</Button>
-                    <Button onClick={onOpenUpcomingSessionsModal}>Upcoming Sessions</Button>
-                </p>
+                <ul >
+                    <li>
+                        <Button to={""} textOnly>Our mission</Button>
+                    </li>
+                    <li>
+                        <Button to={"sessions"} textOnly>Browse Sessions</Button>
+                    </li>
+                    <li>
+                        <Button onClick={onOpenUpcomingSessionsModal}>Upcoming Sessions</Button>
+                    </li>
+                </ul>
             </nav>
         </header>
     </>

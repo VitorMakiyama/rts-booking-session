@@ -28,12 +28,15 @@ export default function UpcomingSessions({ onClose }: UpcomingSessionsProps) {
     return <Modal ref={modal} onClose={onClose}>
         <h2>Upcoming Sessions</h2>
         <div>
+            {upcomingSessions.length === 0 && <p>No booked sessions yet! 😉</p>}
             {upcomingSessions.length > 0 && <ul id="upcoming-list">
                 {upcomingSessions.map((session) => {
-                    return <UpcomingSession sessionData={session} onCancelSession={onCancelUpcomingSession} />
+                    return <UpcomingSession sessionData={session} onCancelSession={onCancelUpcomingSession} key={session.id} />
                 })}
             </ul>}
         </div>
-        <Button textOnly onClick={onClose}>Close</Button>
+        <p className="actions">
+            <Button onClick={onClose}>Close</Button>
+        </p>
     </Modal>;
 };

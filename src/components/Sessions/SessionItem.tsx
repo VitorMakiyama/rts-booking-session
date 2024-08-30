@@ -21,10 +21,11 @@ export default function SessionItem({ item }: SessionItemProps) {
             <div className="session-data">
                 <h3>{item.title}</h3>
                 {item.summary}
+                
+                <p className="actions">
+                    <Button to={item.id}>Learn more!</Button>
+                </p>
             </div>
-            <p>
-                <Button to={item.id}>Learn more!</Button>
-            </p>
         </div>
     </li>;
 };
